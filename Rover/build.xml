@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<project default="test" name="Rover" basedir=".">
+	
+	<property name="src"   value="src"/>
+	<property name="build" value="bin"/>
+	<property name="lib"   value="lib"/>
+	<property name="test"   value="test"/>
+	<property name="test.class.name" value="com.thoughtworks.marsrovers.RoverTest" />
+
+	
+	<path id="master-classpath">  
+		<fileset dir="${lib}">    
+			<include name="*.jar"/> 
+		</fileset>
+	</path>
+	
+	<path id="test.classpath">			
+		<pathelement location="${build}" />		
+	</path>
+	
+	<target name="clean">
+	        <delete dir="${build}"/>
+	</target>
+
+	
+	<target name="init" depends="clean">
+	    <mkdir dir="${build}"/>
+	</target>
+  
+    <target name="compile" depends="init">
+    	<echo>Compiling source and test code</echo>
+        <javac srcdir="${src}" destdir="${build}"/>
+    	<javac srcdir="${test}" destdir="${build}">
+    		<classpath refid="master-classpath"/>
+    	</javac>
+    </target>
+	
+	<target name="test" depends="compile">
+	  <junit fork="yes" haltonfailure="yes" printsummary="yes">
+	    <test name="${test.class.name}" />
+	    <formatter type="plain" usefile="false" />
+	    <classpath refid="test.classpath" />
+	  </junit>
+	</target>
+</project>
